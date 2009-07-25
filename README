@@ -1,0 +1,77 @@
+The python script createjQueryXMLDocs.py goes to the internet and retrieves API data 
+from jQuery's wiki then converts it to an XML format for use by other applications.  It 
+was written by David Serduke in late 2007.
+
+There are a few options that can be passed in:
+
+  help:
+    For reading and displaying this help out of SVN. (defaults to 'false' unless no
+    parameters were set)
+
+  supresscontenttype:
+    For use when not running on a web server. (defaults to 'false')
+
+  start:
+    The starting place in the wiki. (defaults to 'API')
+
+  exporter:
+    The wiki XML exporter page. (defaults to 'http://docs/jquery.com/Special:Export')
+
+  version:
+    The version number to put on the generated XML document. (defaults to 'Unknown')
+
+  convertlinks:
+    The method to convert wiki links like [[Ajax_Events|Ajax Events]].  Can have the
+    value of 'none', 'html', or 'node'.  These either i(respectively) send it on, 
+    convert to a string like "<a href='Ajax_Events'>Ajax Events</a>", 
+    or create an XML node named 'a' with the same information. (defaults to 'html')
+
+  forlinksurl:
+    Value to prepend to any wiki link like 'http://docs.jquery.com/' (defaults to '')
+
+  verbose:
+    Can add an XML node 'info' to the root 'docs' element that has conversion details
+    mostly for debugging purposes. It will also create "pretty" xml when not set to
+    false.  Can have the value of 'false', 'true', or 'super'.  (defaults to 'false')
+
+  debug:
+    Will force the output to be text/plain instead of text/xml and put verbose messages
+    to normal print instead of sticking them in the xml tree.  (defaults to 'false')
+  
+The basic XML format is as follows:
+
+<docs timestamp="[last time anything was modified]" version="[version parameter]" startdoc='[start param]'>
+  <info> - this node is here if 'verbose' parameter was set to other than 'false'
+    <msg>Loading...</msg>
+  </info>
+  <cat value="Core">
+    <subcat value="$(...) The jQuery Function">
+      <function name="jQuery" .../>
+      <function .../>
+      <selector .../>
+      <property .../>
+    </subcat>
+  </cat>
+</docs>
+
+The 'cat' and 'subcat' elements are optional depending on the 'start' parameter and what
+is in the wiki data.  Other than that, most of the wiki data is converted directly to an
+XML equivilent so if anything new is added to the wiki it should be sent right over to
+the XML document the next time it is created.
+
+Here are a few examples of how to use the script.
+
+To get this help:
+http://[location of script]/createjQueryXMLDocs.py
+
+To get the API:
+http://[location of script]/createjQueryXMLDocs.py?version=1.2.2
+
+To get the UI:
+http://[location of script]/createjQueryXMLDocs.py?start=UI&version=1.1
+
+To get a specific function:
+http://[location of script]/createjQueryXMLDocs.py?start=Events/bind&version=1.2.2
+
+To get a debug a problem:
+http://[location of script]/createjQueryXMLDocs.py?start=Selectors&verbose=super&debug=true
